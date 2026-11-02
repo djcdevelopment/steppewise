@@ -36,3 +36,8 @@ details>summary{list-style-position:outside}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
 [hidden]{display:none!important} button:disabled{opacity:.5;cursor:default} article:focus{outline:3px solid #1f4690} .step{width:100%;text-align:left;font:inherit;padding:12px;background:transparent;border:2px solid transparent;border-radius:6px} .step[aria-current=step]{border-color:#1f4690;background:#eef2f9} main{overflow-wrap:anywhere} @media(max-width:600px){article{padding:16px!important} pre{white-space:pre-wrap} }
+.analytics-choice{border:1px solid #d6d2c6;border-radius:8px;padding:20px;background:#fff}
+.analytics-choice h2{margin:0;font-size:22px}
+.analytics-choice p{font-size:16px}
+.analytics-choice button,.analytics-settings{font:inherit;font-size:16px;min-height:44px;padding:10px 16px;border:1px solid #1a1d1b;border-radius:6px;background:#fff;color:#1a1d1b;cursor:pointer;margin:4px 8px 4px 0}
+.analytics-settings{align-self:flex-start}
