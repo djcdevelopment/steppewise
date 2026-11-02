@@ -19,9 +19,9 @@ Most agentic demos treat governance and observability as post-hoc logging. Stepp
 
 1. **Typed Sealed Executor Contracts (`src/Steppewise/Contracts.cs`)**: Every edge in `WorkflowBuilder` passes one of five `sealed record` types (`RunInput`, `Candidate`, `Verdict`, `ReviewDecision`, `RunOutcome`) carrying `RunId`, `Sequence`, and `CauseSequence`. Messages round-trip cleanly through `System.Text.Json` with zero runtime or session handle leaks.
 2. **Draft → Verify → Repair → Verify → Human `RequestPort`**: Each workflow executes a validated five-step chain (`fixture.draft` → `verify` → `fixture.repair` → `verify` → `human.review`) through `InProcessExecution.RunStreamingAsync` and `RequestPort.Create<Verdict, ReviewDecision>`. Both the initial failed candidate (`candidate-1`) and the repaired passing candidate (`candidate-2`) are preserved in the ledger with their SHA-256 digests.
-3. **Append-Only Event Ledger (`run-<id>.events.jsonl`)**: Every transition appends and flushes a `DurableEvent` JSONL record before advancing. Materialized snapshots (`run-<id>.json`) are stateless reductions written at most three times per run (admission, waiting review, terminal), reducing full-snapshot file rewrites from `55` to `3` (`-94.55%`).
+3. **Append-Only Event Ledger (`run-<id>.events.jsonl`)**: Every transition appends and flushes a `DurableEvent` JSONL record before advancing. Materialized snapshots (`run-<id>.json`) are stateless reductions. Snapshots are written 3 times per run: admission, awaiting review, terminal.
 4. **Bidirectional OpenTelemetry Span Correlation (`spans.jsonl`)**: `ActivitySource("Steppewise")` and `ActivityListener` flush an activity for every domain event, matching `traceId` and `spanId` between `run-<id>.events.jsonl` and `spans.jsonl`.
-5. **Fail-Closed Startup & Fault Recovery**: Interrupted in-flight runs recover as `Failed (Interrupted)`, interrupted review decisions surface as `Failed (NeedsReconciliation)` rather than silently auto-completing, and tampered snapshots or torn event logs fail closed at startup.
+5. **Fail-Closed Startup & Fault Recovery**: Interrupted in-flight runs recover as `Failed (Interrupted)`, interrupted review decisions surface as `Failed (NeedsReconciliation)` rather than silently auto-completing, and tampered files refuse startup.
 
 ![Beginner Execution Panel](docs/architecture/panels/a-execute.svg)
 
@@ -60,6 +60,8 @@ dotnet run --project src/Steppewise/Steppewise.csproj -c Release --no-build
 ---
 
 ## Walkthrough: Draft, Verify, Repair, and SHA-Bound Human Review
+
+If you have forty minutes and want to see it before reading it: [walkthrough panel](docs/architecture/panels/a-execute.svg) (the execution panel is the only panel currently in that directory).
 
 1. **Select a workflow**:
    - **Service intake · change request review** (`service-intake`, `examples/service-intake.json`) — generates a synthetic change-request packet (`ticket: "CR-1042"`), catches a missing `rollbackPlan` on `candidate-1`, repairs the packet in `candidate-2`, and pauses at `AwaitingReview`.
@@ -108,7 +110,7 @@ python3 scripts/qualify.py --url http://127.0.0.1:5188
 
 Verifies admission, failed original candidate preservation (`candidate-1`), repaired candidate verification (`candidate-2`), SHA-256 digest integrity, causal `CauseSequence` domain chaining, executor entry ordering, stale-hash `HTTP 409` rejection, explicit accept/reject receipts, duplicate-review `HTTP 409` rejection, and unknown-workflow refusal across both `service-intake` and `local-ai-work` (`docs/qualification-linux.json`).
 
-### 2. Managed Process-Kill Fault Qualification (`3,435 / 3,435` Tier-A checks · `8,182 / 8,182` Full Tier-C checks)
+### Crash testing: 358 forced process kills, 3,435 / 3,435 checks
 
 ```bash
 dotnet publish src/Steppewise/Steppewise.csproj -c Release -warnaserror -p:RestoreLockedMode=true -p:SourceRevisionId=$(git rev-parse HEAD) -o artifacts/portable
@@ -121,12 +123,15 @@ python3 scripts/qualify.py --managed --milestone A --dotnet dotnet --dll artifac
 
 See [docs/QUALIFICATION.md](docs/QUALIFICATION.md) and [CHANGELOG.md](CHANGELOG.md) for the full verification protocol and release metrics.
 
+What review found and what changed: [docs/REVIEW-HISTORY.md](docs/REVIEW-HISTORY.md)
+
 ---
 
 ## Capability Boundaries & What Is Not Claimed
 
 Steppewise documents its exact verified scope in [docs/STATUS.md](docs/STATUS.md) and [CONTRACTS-v2.md](CONTRACTS-v2.md):
 
+- A truncated event log stops the whole host, not just that run. Per-run quarantine is planned for M4. See [`Runtime.cs` — `LoadEvidence`, lines 244–261](src/Steppewise/Runtime.cs#L244-L261).
 - **Synthetic fixtures only (`v0.1.0`)**: No live LLM calls, external APIs, or prompt-injection benchmarks are executed.
 - **Single-host `.owner.lock` storage**: Concurrent multi-host writers, network filesystems (NFS/SMB), and distributed PostgreSQL leases are not implemented in `v0.1.0`.
 - **Graph reconstruction vs. `CheckpointManager`**: `RestoreReview` rebuilds a fresh three-node MAF review graph from the validated event log rather than calling `InProcessExecution.ResumeStreamingAsync` with a `CheckpointManager`.
