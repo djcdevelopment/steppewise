@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "local-ai-work",
+  "version": 1,
+  "title": "Synthetic local AI work",
+  "steps": [
+    {
+      "id": "draft",
+      "action": "fixture.draft",
+      "boundary": "worker.fixture"
+    },
+    {
+      "id": "check-original",
+      "action": "verify",
+      "boundary": "software.verifier"
+    },
+    {
+      "id": "repair",
+      "action": "fixture.repair",
+      "boundary": "worker.fixture"
+    },
+    {
+      "id": "check-repair",
+      "action": "verify",
+      "boundary": "software.verifier"
+    },
+    {
+      "id": "review",
+      "action": "human.review",
+      "boundary": "human.operator"
+    }
+  ]
+}

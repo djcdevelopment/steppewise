@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "C · Start produces evidence, not acceptance",
+    "quality_profile": "showcase",
+    "animation": "none",
+    "viewBox": [
+      1000,
+      500
+    ],
+    "column_fit": "spread"
+  },
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "Typed work; retained evidence",
+      "items": [
+        "Runtime.cs:65–87,156–206; Contracts.cs:8–14.",
+        "Each executor message has RunId, Sequence and CauseSequence.",
+        "event log · source of truth — Runtime.cs:208–243,244–289."
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Local tracing",
+      "items": [
+        "Start request: domain event spans chain to the previous event; MAF spans sit under workflow.run; both share one trace id.",
+        "Runtime.cs:212–220; 75–79,175. Shape is not complete coverage proof."
+      ]
+    }
+  ],
+  "participants": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Browser",
+      "sublabel": "person + UI"
+    },
+    {
+      "id": "rt",
+      "type": "backend",
+      "label": "Runtime",
+      "sublabel": "gate + run state"
+    },
+    {
+      "id": "maf",
+      "type": "backend",
+      "label": "MAF graph",
+      "sublabel": "fixture + verifier"
+    },
+    {
+      "id": "disk",
+      "type": "database",
+      "label": "event log",
+      "sublabel": "source of truth"
+    }
+  ],
+  "messages": [
+    {
+      "id": "c1",
+      "from": "ui",
+      "to": "rt",
+      "y": 165,
+      "label": "Start service-intake",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c2",
+      "from": "rt",
+      "to": "disk",
+      "y": 200,
+      "label": "New RunId; Running; admission",
+      "variant": "default"
+    },
+    {
+      "id": "c3",
+      "from": "rt",
+      "to": "maf",
+      "y": 235,
+      "label": "RunInput → Candidate → Verdict",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c4",
+      "from": "rt",
+      "to": "disk",
+      "y": 270,
+      "label": "Failed original + repaired artifact",
+      "variant": "default"
+    },
+    {
+      "id": "c5",
+      "from": "maf",
+      "to": "rt",
+      "y": 305,
+      "label": "RequestPort waits; final check passed",
+      "variant": "return"
+    },
+    {
+      "id": "c6",
+      "from": "rt",
+      "to": "disk",
+      "y": 340,
+      "label": "AwaitingReview",
+      "variant": "default"
+    },
+    {
+      "id": "c7",
+      "from": "rt",
+      "to": "ui",
+      "y": 375,
+      "label": "Both artifacts + checks",
+      "variant": "return"
+    }
+  ]
+}

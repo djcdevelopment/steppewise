@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "evidenceCategory": "synthetic-http-qualification",
+  "liveInference": false,
+  "storage_root": null,
+  "dll_sha256": null,
+  "checks": [
+    {
+      "name": "qualification.later-sentinel",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "qualification.collects-failures",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.admitted",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.fixture",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.artifact-hash.candidate-1",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.artifact-hash.candidate-2",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.sequence",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.causal-chain",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.awaiting-review",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.failed-original",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.repaired",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.stale-hash-rejected",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.explicit-review",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "service-intake.duplicate-review-refused",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.admitted",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.fixture",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.artifact-hash.candidate-1",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.artifact-hash.candidate-2",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.sequence",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.causal-chain",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.awaiting-review",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.failed-original",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.repaired",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.stale-hash-rejected",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.explicit-review",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "local-ai-work.duplicate-review-refused",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    },
+    {
+      "name": "qualification.latency-fields",
+      "passed": true,
+      "detail": null,
+      "latency_ms": 0.0
+    }
+  ],
+  "runs": [
+    {
+      "name": "service-intake",
+      "latency_ms": 79.454
+    },
+    {
+      "name": "local-ai-work",
+      "latency_ms": 7.923
+    }
+  ],
+  "requests": [
+    {
+      "path": "/api/runs/service-intake",
+      "status": 200,
+      "latency_ms": 67.304
+    },
+    {
+      "path": "/api/runs/4593048fdb3540b9a8b4c6ced1afc419/review",
+      "status": 409,
+      "latency_ms": 6.901
+    },
+    {
+      "path": "/api/runs/4593048fdb3540b9a8b4c6ced1afc419/review",
+      "status": 200,
+      "latency_ms": 4.543
+    },
+    {
+      "path": "/api/runs/4593048fdb3540b9a8b4c6ced1afc419/review",
+      "status": 409,
+      "latency_ms": 0.624
+    },
+    {
+      "path": "/api/runs/local-ai-work",
+      "status": 200,
+      "latency_ms": 5.577
+    },
+    {
+      "path": "/api/runs/c7bed2fa5e284d28a517a8a20b3d790b/review",
+      "status": 409,
+      "latency_ms": 0.741
+    },
+    {
+      "path": "/api/runs/c7bed2fa5e284d28a517a8a20b3d790b/review",
+      "status": 200,
+      "latency_ms": 1.203
+    },
+    {
+      "path": "/api/runs/c7bed2fa5e284d28a517a8a20b3d790b/review",
+      "status": 409,
+      "latency_ms": 0.344
+    }
+  ],
+  "latency_ms": 87.394,
+  "passed": 27,
+  "failed": 0
+}

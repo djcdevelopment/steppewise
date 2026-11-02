@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "selection": "Four README diagrams from the revised architecture set. Walkthrough remains a separate beginner path.",
+  "sets": [
+    {
+      "set": "initial architecture",
+      "documentation_commit": "f26050ed6c35346834433d42d0d100817fe5f034",
+      "code_commit": "f4aad58b200dc712b5c4c53dff27b42f20744e02",
+      "note": "Uncommitted derived rendering bundle; no independent render commit. Generated from the pinned document and code."
+    },
+    {
+      "set": "revised architecture",
+      "documentation_commit": "4895a43c7354a0168ec413962c07365487ee2224",
+      "code_commit": "f4aad58b200dc712b5c4c53dff27b42f20744e02",
+      "selected": true
+    },
+    {
+      "set": "beginner walkthrough",
+      "documentation_commit": "a851ce65f7dd86fce24d3414da423c6c02d3fa17",
+      "latest_banner_commit": "3c1ed6622448a9cac8a3b591d964224c89d03cbd",
+      "code_commit": "f4aad58b200dc712b5c4c53dff27b42f20744e02"
+    }
+  ],
+  "release_mapping": {
+    "file": "docs/public-readiness/rename.csv",
+    "sha256": "f5fd5bbc72e1f0418ef9229ea7c07338b19b9125ad549821a1babc54a4df58eb",
+    "status": "Working-file input; not represented as committed source.",
+    "fixture": "Synthetic service change intake; missing rollback plan is repaired.",
+    "application": "Steppewise"
+  },
+  "renderer": {
+    "name": "Archify",
+    "version": "2.16.0",
+    "output": "Native SVG export from native JSON render; no PNG or HTML delivered."
+  },
+  "limits": [
+    "Renamed fixture wording follows the release mapping; this is not runtime requalification.",
+    "Topology and line citations describe the original code commit.",
+    "Renderer checks are self-checks, not independent validation.",
+    "No application repository or worktree was written."
+  ],
+  "selected_files": [
+    "journey.workflow.json",
+    "responsibilities.architecture.json",
+    "lifetime.sequence.json",
+    "review.sequence.json",
+    "panels/a-execute.architecture.json",
+    "panels/a-execute.svg"
+  ],
+  "additional_panel_source_commit": "a851ce65f7dd86fce24d3414da423c6c02d3fa17",
+  "citation_correction": "Host setup: Program.cs:7\u201326; HTTP routes: Program.cs:53\u201371, per release audit."
+}

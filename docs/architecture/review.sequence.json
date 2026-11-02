@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "D · Restart restores review, never invents acceptance",
+    "quality_profile": "showcase",
+    "animation": "none",
+    "viewBox": [
+      1000,
+      500
+    ],
+    "column_fit": "spread"
+  },
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "Recovery state · Runtime.cs:90–154,244–289",
+      "items": [
+        "Interrupted work becomes Failed; unfinished decisions need reconciliation.",
+        "event log · source of truth — Runtime.cs:208–243,244–289."
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "No automatic retry or checkpoint resume",
+      "items": [
+        "Only AwaitingReview can rebuild its review graph; definition must match.",
+        "Repeated terminal review is refused; a new Start creates a new run."
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Known limits at f4aad58",
+      "items": [
+        "Torn log refuses the whole host. Proposed M4: isolate torn-write recovery.",
+        "Runtime.cs:244–249. No checkpoint resume or automatic retry is implemented."
+      ]
+    }
+  ],
+  "participants": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Browser",
+      "sublabel": "person + UI"
+    },
+    {
+      "id": "rt",
+      "type": "backend",
+      "label": "Runtime",
+      "sublabel": "gate + run state"
+    },
+    {
+      "id": "maf",
+      "type": "backend",
+      "label": "MAF graph",
+      "sublabel": "fixture + verifier"
+    },
+    {
+      "id": "disk",
+      "type": "database",
+      "label": "event log",
+      "sublabel": "source of truth"
+    }
+  ],
+  "messages": [
+    {
+      "id": "d1",
+      "from": "disk",
+      "to": "rt",
+      "y": 165,
+      "label": "Startup: replay validated log",
+      "variant": "return"
+    },
+    {
+      "id": "d2",
+      "from": "ui",
+      "to": "rt",
+      "y": 200,
+      "label": "Review: RunId + SHA + actor + choice",
+      "variant": "security"
+    },
+    {
+      "id": "d3",
+      "from": "rt",
+      "to": "maf",
+      "y": 235,
+      "label": "If waiting: rebuild review graph",
+      "variant": "emphasis"
+    },
+    {
+      "id": "d4",
+      "from": "rt",
+      "to": "disk",
+      "y": 270,
+      "label": "DecisionRequested + DecisionId",
+      "variant": "default"
+    },
+    {
+      "id": "d5",
+      "from": "rt",
+      "to": "maf",
+      "y": 305,
+      "label": "ReviewDecision → finish executor",
+      "variant": "emphasis"
+    },
+    {
+      "id": "d6",
+      "from": "rt",
+      "to": "disk",
+      "y": 340,
+      "label": "Accepted / Rejected + actor",
+      "variant": "default"
+    },
+    {
+      "id": "d7",
+      "from": "rt",
+      "to": "ui",
+      "y": 375,
+      "label": "Recorded receipt",
+      "variant": "return"
+    }
+  ]
+}

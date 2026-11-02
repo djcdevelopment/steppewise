@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.state/
+artifacts/
+.env
+
+.local/
+qualification.json
+
+__pycache__/
+*.pyc

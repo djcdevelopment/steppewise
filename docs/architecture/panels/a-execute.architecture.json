@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "A1 · Work runs before you decide",
+    "quality_profile": "showcase",
+    "animation": "none",
+    "viewBox": [
+      400,
+      535
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "start",
+      "type": "backend",
+      "label": "Start service-intake",
+      "sublabel": "Browser submits; waits for evidence",
+      "pos": [
+        65,
+        35
+      ],
+      "size": [
+        270,
+        65
+      ]
+    },
+    {
+      "id": "draft",
+      "type": "backend",
+      "label": "Draft + verify",
+      "sublabel": "Rollback plan missing; check fails",
+      "pos": [
+        65,
+        135
+      ],
+      "size": [
+        270,
+        65
+      ]
+    },
+    {
+      "id": "repair",
+      "type": "backend",
+      "label": "Repair + verify",
+      "sublabel": "Rollback added; QA can force failure",
+      "pos": [
+        65,
+        235
+      ],
+      "size": [
+        270,
+        65
+      ]
+    },
+    {
+      "id": "port",
+      "type": "backend",
+      "label": "RequestPort waits",
+      "sublabel": "Both verdicts reach this port",
+      "pos": [
+        65,
+        335
+      ],
+      "size": [
+        270,
+        65
+      ]
+    },
+    {
+      "id": "drain",
+      "type": "backend",
+      "label": "Start checks after Drain",
+      "sublabel": "Pass: AwaitingReview → A2; fail: Failed",
+      "pos": [
+        65,
+        435
+      ],
+      "size": [
+        270,
+        65
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "a-execute-0",
+      "from": "start",
+      "to": "draft",
+      "label": "execute",
+      "labelDy": 22
+    },
+    {
+      "id": "a-execute-1",
+      "from": "draft",
+      "to": "repair",
+      "label": "always [1]",
+      "labelDy": 22
+    },
+    {
+      "id": "a-execute-2",
+      "from": "repair",
+      "to": "port",
+      "label": "either verdict",
+      "labelDy": 22
+    },
+    {
+      "id": "a-execute-3",
+      "from": "port",
+      "to": "drain",
+      "label": "Drain returns",
+      "labelDy": 22
+    }
+  ],
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "Implementation references",
+      "items": [
+        "Runtime.cs:65–87,156–206; app.js:52–56",
+        "[1] repair is unconditional in v1; conditional routing is a general-graph feature."
+      ]
+    }
+  ]
+}

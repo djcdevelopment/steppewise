@@ -1,0 +1,14 @@
+Payload files: SHA-256 | source commit | file | description.
+MANIFEST.txt excludes itself; its digest is reported separately.
+d6726a88ffa3783b8345d4e3d11249d446107a98d7057433ca7993495231b97b | 4895a43c7354a0168ec413962c07365487ee2224 | journey.svg | Release-mapped user journey and human decision.
+4222a37095254c3f7735c8f8a06358a551302933e6301f6a39e0c001a469b053 | 4895a43c7354a0168ec413962c07365487ee2224 | journey.workflow.json | Release-mapped user journey and human decision.
+216a898657ca0f00df537f3153e0e76821f283c83d32b2e6b98fc2ba729dc77a | 4895a43c7354a0168ec413962c07365487ee2224 | lifetime.sequence.json | Service request execution through verified review.
+0c7737146828214eed065dbbaac16dd87980e46db55f713b1b83cdc63cace684 | 4895a43c7354a0168ec413962c07365487ee2224 | lifetime.svg | Service request execution through verified review.
+528ae59cadf1ef3b668ca0ae74dec0893cad9f3845903ec0447e190453fcbef6 | a851ce65f7dd86fce24d3414da423c6c02d3fa17 | panels/a-execute.architecture.json | Beginner execution panel with release-mapped service fixture.
+591f6c06a82b35ae66f26e24b2f347e35798c8134f5fbeaab94006bd739f7035 | a851ce65f7dd86fce24d3414da423c6c02d3fa17 | panels/a-execute.svg | Beginner execution panel with release-mapped service fixture.
+15a8b2b20d0f17ae0f2d1551e0d67531ea0269064f4755a0ca96378b689efec3 | f26050ed6c35346834433d42d0d100817fe5f034,4895a43c7354a0168ec413962c07365487ee2224,a851ce65f7dd86fce24d3414da423c6c02d3fa17,3c1ed6622448a9cac8a3b591d964224c89d03cbd | provenance.json | Exact source commits and mapping digest.
+6d94b97a1edf16441f260ad0814e733b4b4a0619e597b2602eb6d2281dff5967 | 4895a43c7354a0168ec413962c07365487ee2224 | responsibilities.architecture.json | Host setup and HTTP routes cited separately; execution and evidence ownership.
+e6ea1c66585c0cab01e387f461fccf5b4b98132c901b30d90cb8fd8855243f03 | 4895a43c7354a0168ec413962c07365487ee2224 | responsibilities.svg | Host setup and HTTP routes cited separately; execution and evidence ownership.
+a5f2b30713b2ebbadec70e8b6173b5122956dd6c3b3f66889eb8918c4f50dae7 | 4895a43c7354a0168ec413962c07365487ee2224 | review.sequence.json | Restart reconstruction and explicit decision receipt.
+968dae38b0a747f3e9fae6fd7b681a405e3dec2267b77b7d93bbc3d5d6c1cba4 | 4895a43c7354a0168ec413962c07365487ee2224 | review.svg | Restart reconstruction and explicit decision receipt.
+d813f86db6410c00d57f9dd174281de83b7937f8448d65a142c4a3a6e4fc1d1d | 4895a43c7354a0168ec413962c07365487ee2224 | scan.json | Final recursive disclosure scan result.

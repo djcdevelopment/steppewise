@@ -1,0 +1,9 @@
+{
+  "scan": "Recursive case-insensitive content scan; all deliverable files including metadata and manifest.",
+  "expression_sha256": "f47744b78ca914f197fc81ea193dfc17365bc892ba5edee92d3c0a246ea0d04d",
+  "matches": 0,
+  "stdout": "",
+  "exit_code": 1,
+  "excluded_sidecars_present": false,
+  "scope": "Requested prohibited vocabulary, known environment identifiers in disclosure audit, and address patterns; no unknown proper-name inventory was supplied."
+}

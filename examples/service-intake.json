@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "service-intake",
+  "version": 1,
+  "title": "Synthetic service change intake",
+  "steps": [
+    {
+      "id": "draft",
+      "action": "fixture.draft",
+      "boundary": "request.intake"
+    },
+    {
+      "id": "check-original",
+      "action": "verify",
+      "boundary": "software.verifier"
+    },
+    {
+      "id": "repair",
+      "action": "fixture.repair",
+      "boundary": "request.intake"
+    },
+    {
+      "id": "check-repair",
+      "action": "verify",
+      "boundary": "software.verifier"
+    },
+    {
+      "id": "review",
+      "action": "human.review",
+      "boundary": "human.operator"
+    }
+  ]
+}

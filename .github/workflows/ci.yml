@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ "v*" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Locked NuGet restore
+        run: dotnet restore src/Steppewise/Steppewise.csproj --locked-mode
+
+      - name: Build Release with warnings as errors
+        run: dotnet build src/Steppewise/Steppewise.csproj -c Release --no-restore -warnaserror
+
+      - name: Publish portable candidate with embedded SourceRevisionId
+        shell: bash
+        run: |
+          dotnet publish src/Steppewise/Steppewise.csproj -c Release -warnaserror -p:RestoreLockedMode=true -p:SourceRevisionId="${GITHUB_SHA:-0000000000000000000000000000000000000000}" -o artifacts/portable
+
+      - name: Run fresh-storage HTTP qualification (27 checks)
+        shell: bash
+        run: |
+          STORAGE_DIR="$(mktemp -d)"
+          PORT="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
+          STEPPEWISE_ENV=dev STEPPEWISE_PORT="${PORT}" STEPPEWISE_STORAGE="${STORAGE_DIR}" STEPPEWISE_DEFINITIONS="${PWD}/examples" \
+            dotnet artifacts/portable/Steppewise.dll > host.log 2>&1 &
+          HOST_PID=$!
+          for i in $(seq 1 50); do
+            if curl -sf "http://127.0.0.1:${PORT}/api/info" >/dev/null 2>&1; then break; fi
+            sleep 0.2
+          done
+          python3 scripts/qualify.py --url "http://127.0.0.1:${PORT}" --output qualification-http.json
+          kill "${HOST_PID}" 2>/dev/null || true

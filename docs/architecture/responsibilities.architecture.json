@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "B · The log is truth; MAF executes the work",
+    "quality_profile": "showcase",
+    "animation": "none",
+    "viewBox": [
+      1120,
+      620
+    ],
+    "legend": {
+      "entries": {
+        "database": {
+          "label": "Evidence files"
+        },
+        "backend": {
+          "label": "In-process code"
+        }
+      }
+    }
+  },
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "Responsibilities",
+      "items": [
+        "Host setup: Program.cs:7–26. HTTP routes: Program.cs:53–71.",
+        "Runtime → graph: Runtime.cs:156–176. Fixtures are local; no model requests.",
+        "Host/Origin checks: Program.cs:27–51."
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Durable evidence",
+      "items": [
+        "Emit writes the log and snapshots: Runtime.cs:208–243,302–324.",
+        "Listener: Runtime.cs:39–47; domain spans also come from Emit. No OTLP.",
+        "Snapshot is derived; Runtime.cs:230–232,302–311. Log is replayed on start."
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Browser UI",
+      "sublabel": "Start, inspect, decide",
+      "pos": [
+        40,
+        70
+      ],
+      "size": [
+        210,
+        70
+      ]
+    },
+    {
+      "id": "host",
+      "type": "backend",
+      "label": "Host setup · Program.cs:7–26",
+      "sublabel": "loopback · Host/Origin · env gate",
+      "pos": [
+        380,
+        70
+      ],
+      "size": [
+        240,
+        90
+      ]
+    },
+    {
+      "id": "runtime",
+      "type": "backend",
+      "label": "WorkflowRuntime",
+      "sublabel": "Own runs; serialize work",
+      "pos": [
+        760,
+        70
+      ],
+      "size": [
+        210,
+        70
+      ]
+    },
+    {
+      "id": "graph",
+      "type": "backend",
+      "label": "MAF graph",
+      "sublabel": "Typed fixture + checks",
+      "pos": [
+        760,
+        280
+      ],
+      "size": [
+        210,
+        70
+      ]
+    },
+    {
+      "id": "log",
+      "type": "database",
+      "label": "event log · source of truth",
+      "sublabel": "run-<id>.events.jsonl",
+      "pos": [
+        350,
+        280
+      ],
+      "size": [
+        260,
+        70
+      ]
+    },
+    {
+      "id": "spans",
+      "type": "backend",
+      "label": "Span listener",
+      "sublabel": "Write local spans.jsonl",
+      "pos": [
+        760,
+        470
+      ],
+      "size": [
+        210,
+        70
+      ]
+    },
+    {
+      "id": "snapshot",
+      "type": "database",
+      "label": "Snapshot · derived file",
+      "sublabel": "run-<id>.json",
+      "pos": [
+        350,
+        470
+      ],
+      "size": [
+        260,
+        70
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "b1",
+      "from": "ui",
+      "to": "host",
+      "label": "commands"
+    },
+    {
+      "id": "b2",
+      "from": "host",
+      "to": "runtime",
+      "label": "start / review"
+    },
+    {
+      "id": "b3",
+      "from": "runtime",
+      "to": "graph",
+      "label": "typed messages",
+      "labelDy": 60
+    },
+    {
+      "id": "b4",
+      "from": "runtime",
+      "to": "log",
+      "label": "events + artifacts"
+    },
+    {
+      "id": "b5",
+      "from": "graph",
+      "to": "spans",
+      "label": "activities",
+      "labelDy": 60
+    },
+    {
+      "id": "b6",
+      "from": "runtime",
+      "to": "snapshot",
+      "label": "projection snapshot",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "via": [
+        [
+          1050,
+          105
+        ],
+        [
+          1050,
+          580
+        ],
+        [
+          480,
+          580
+        ]
+      ],
+      "labelAt": [
+        1050,
+        400
+      ]
+    }
+  ]
+}

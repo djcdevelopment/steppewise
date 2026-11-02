@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "A · Inspect a repaired change request, then decide",
+    "quality_profile": "showcase",
+    "animation": "none"
+  },
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "Evidence, not automatic acceptance",
+      "items": [
+        "Start waits for completion; admission alone is not execution.",
+        "Runtime.cs:65–87,156–206; app.js:47–65",
+        "event log · source of truth — Runtime.cs:208–243.",
+        "Actor provenance: Runtime.cs:105–106; decision receipt: 145–154."
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Restart behavior",
+      "items": [
+        "Waiting runs rebuild only the review graph; interrupted work becomes Failed.",
+        "Unfinished decisions need reconciliation. Runtime.cs:130–143,244–289"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "[1] always · Runtime.cs:156–176",
+      "items": [
+        "repair is unconditional in v1; conditional routing is a general-graph feature",
+        "As-built: failed repair reaches the port; Start fails after drain (81–85,162)."
+      ]
+    }
+  ],
+  "lanes": [
+    {
+      "id": "work",
+      "label": "Start and execute · synthetic service change intake"
+    },
+    {
+      "id": "human",
+      "label": "Inspect and decide · a person owns acceptance"
+    },
+    {
+      "id": "failure",
+      "label": "Failure · keep evidence, do not infer acceptance",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "lane": "work",
+      "col": 0,
+      "type": "backend",
+      "label": "Start service intake",
+      "sublabel": "UI waits for evidence",
+      "width": 145
+    },
+    {
+      "id": "draft",
+      "lane": "work",
+      "col": 1,
+      "type": "backend",
+      "label": "Draft + check",
+      "sublabel": "Rollback plan missing",
+      "width": 145
+    },
+    {
+      "id": "repair",
+      "lane": "work",
+      "col": 2,
+      "type": "backend",
+      "label": "Repair + check",
+      "sublabel": "Rollback added; QA can fail",
+      "width": 160
+    },
+    {
+      "id": "port",
+      "lane": "work",
+      "col": 3,
+      "type": "backend",
+      "label": "Review port",
+      "sublabel": "Drain reaches RequestPort",
+      "width": 185
+    },
+    {
+      "id": "afterdrain",
+      "lane": "work",
+      "col": 4,
+      "type": "backend",
+      "label": "Start checks verdict",
+      "sublabel": "After Drain returns",
+      "width": 175
+    },
+    {
+      "id": "inspect",
+      "lane": "human",
+      "col": 2,
+      "type": "frontend",
+      "label": "Inspect both",
+      "sublabel": "AwaitingReview",
+      "width": 145
+    },
+    {
+      "id": "decide",
+      "lane": "human",
+      "col": 3,
+      "type": "frontend",
+      "label": "Accept or reject",
+      "sublabel": "Hash-bound decision",
+      "width": 145
+    },
+    {
+      "id": "record",
+      "lane": "human",
+      "col": 4,
+      "type": "frontend",
+      "label": "Decision recorded",
+      "sublabel": "self-reported or local process user",
+      "width": 225,
+      "tag": "Runtime.cs:105–106"
+    },
+    {
+      "id": "failed",
+      "lane": "failure",
+      "col": 4,
+      "type": "backend",
+      "label": "Failed",
+      "sublabel": "Start emits Failed",
+      "width": 145
+    }
+  ],
+  "edges": [
+    {
+      "id": "a1",
+      "from": "start",
+      "to": "draft",
+      "label": "execute"
+    },
+    {
+      "id": "a2",
+      "from": "draft",
+      "to": "repair",
+      "label": "always [1]"
+    },
+    {
+      "id": "a4",
+      "from": "inspect",
+      "to": "decide",
+      "label": "review"
+    },
+    {
+      "id": "a5",
+      "from": "decide",
+      "to": "record",
+      "label": "receipt"
+    },
+    {
+      "id": "a-port",
+      "from": "repair",
+      "to": "port",
+      "label": "either verdict"
+    },
+    {
+      "id": "a-drain",
+      "from": "port",
+      "to": "afterdrain",
+      "label": "drain"
+    },
+    {
+      "id": "a3",
+      "from": "afterdrain",
+      "to": "inspect",
+      "label": "pass"
+    },
+    {
+      "id": "a6",
+      "from": "afterdrain",
+      "to": "failed",
+      "label": "fail"
+    }
+  ]
+}
