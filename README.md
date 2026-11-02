@@ -27,6 +27,8 @@ Most agentic demos treat governance and observability as post-hoc logging. Stepp
 
 ---
 
+**New here? [Explore the two-minute interactive walkthrough](https://djcdevelopment.github.io/steppewise/)** · [Text version](docs/WALKTHROUGH.md)
+
 ## Quick Start (Linux, macOS, and Windows)
 
 Requires the **.NET 10 SDK** (`10.0.401` or newer `10.0.4xx` feature band; configured in `global.json`).

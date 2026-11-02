@@ -1,0 +1,260 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Steppewise in two minutes</title><meta name="description" content="Explore a verified workflow, human decision, and durable receipt."><link rel="stylesheet" href="style.css"><script defer src="app.js"></script></head><body><a href="#walk-h">Skip to walkthrough</a><main><noscript><p>This is the complete text walkthrough. Interactive decisions require JavaScript.</p></noscript><div style="max-width:1080px;margin:0 auto;padding:40px 20px 80px;display:flex;flex-direction:column;gap:48px">
+
+<header id="top" style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+  <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:15px;color:#4a4f4b">Steppewise · v0.1.0 · two-minute walkthrough</p>
+  <p><strong>Simulation.</strong> This page runs in your browser and does not connect to Steppewise. Events and hashes are illustrative.</p><h1 style="margin:0;font-size:clamp(32px,5vw,44px);line-height:1.15;font-weight:700;letter-spacing:-0.01em">Steppewise</h1>
+  <p style="margin:0;font-size:20px;font-weight:500">Steppewise — deterministic rails for agentic workflows. .NET 10 · Microsoft Agent Framework · OpenTelemetry. Every step verified, every decision human, every run a receipt.</p>
+  <p style="margin:0;color:#3d423e;text-wrap:pretty">This page follows one run of the bundled <strong>service-intake</strong> example from start to finish. Plain language comes first; open “Technical detail” under any step for the names you will see in the code.</p>
+</header>
+
+<section aria-labelledby="answers-h" style="display:flex;flex-direction:column;gap:16px">
+  <h2 id="answers-h" style="margin:0;font-size:24px;line-height:1.3">The short version</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">
+    <div style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <h3 style="margin:0;font-size:18px">What does it do?</h3>
+      <p style="margin:0;text-wrap:pretty">It runs a fixed, five-step workflow: draft a result, check it, repair it, check it again, then stop and wait for a person.</p>
+    </div>
+    <div style="background:#fff;border:2px solid #1f4690;border-radius:8px;padding:19px;display:flex;flex-direction:column;gap:8px">
+      <h3 style="margin:0;font-size:18px;display:flex;gap:10px;align-items:center"><span aria-hidden="true" style="width:18px;height:18px;border-radius:50%;border:3px solid #1f4690;box-sizing:border-box;flex:none"></span>What does the human decide?</h3>
+      <p style="margin:0;text-wrap:pretty">Whether to accept or reject one exact, already-checked result. Nothing finishes as Accepted or Rejected without that decision.</p>
+    </div>
+    <div style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <h3 style="margin:0;font-size:18px">What evidence remains?</h3>
+      <p style="margin:0;text-wrap:pretty">A receipt: an append-only log of every step, both versions of the result, the check outcomes, and the decision with the fingerprint it applied to.</p>
+    </div>
+  </div>
+  <p style="margin:0;padding:12px 16px;background:#ece8dd;border-radius:8px;font-size:16px;text-wrap:pretty"><strong>No AI is called.</strong> In v0.1.0 every “drafted” result comes from a deterministic synthetic fixture, so each run behaves the same way. The workflow shape is what is being demonstrated.</p>
+</section>
+
+<section aria-labelledby="walk-h" style="display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px">
+    <h2 id="walk-h" style="margin:0;font-size:24px;line-height:1.3">One run, step by step</h2>
+    <button disabled type="button" style="font:inherit;font-size:16px;padding:10px 16px;min-height:44px;border:1px solid #1a1d1b;background:#fff;color:#1a1d1b;border-radius:6px;cursor:pointer">Show all steps on one page</button>
+  </div>
+
+  <div role="note" aria-label="Legend" style="display:flex;flex-wrap:wrap;gap:12px 28px;font-size:16px;color:#3d423e">
+    <span style="display:flex;gap:10px;align-items:center"><span aria-hidden="true" style="width:22px;height:22px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box;flex:none"></span><span><strong>Square</strong> = automated step or check</span></span>
+    <span style="display:flex;gap:10px;align-items:center"><span aria-hidden="true" style="width:22px;height:22px;border:3px solid #1f4690;border-radius:50%;box-sizing:border-box;flex:none"></span><span><strong>Circle</strong> = a person decides</span></span>
+    <span style="display:flex;gap:10px;align-items:center"><span><strong>✓ Pass</strong> / <strong>✕ Fail</strong> = check result</span></span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+    <nav aria-label="Walkthrough steps" style="flex:1 1 260px;min-width:0">
+      <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px">
+        
+      </ol>
+    </nav>
+
+    <div style="flex:3 1 440px;min-width:0;display:flex;flex-direction:column;gap:24px">
+      <p aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
+
+      
+      <article aria-labelledby="st1" style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#4a4f4b"><span aria-hidden="true" style="width:20px;height:20px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box"></span>Step 1 of 7 · Automated</p>
+        <h3 id="st1" style="margin:0;font-size:24px;line-height:1.3">A change request arrives</h3>
+        <p style="margin:0;text-wrap:pretty">You start a run of the <strong>service-intake</strong> example. Its input is a synthetic change request, ticket <code>CR-1042</code>. Steppewise gives the run an ID and writes its first entry to the run’s log before doing anything else.</p>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li>Workflow definition: <code>examples/service-intake.json</code>, a five-step sequential chain checked by <code>ValidateDefinition</code> at startup.</li>
+            <li>The input travels as a <code>RunInput</code> sealed record through a Microsoft Agent Framework <code>WorkflowBuilder</code> graph.</li>
+            <li>Admission appends to <code>run-&lt;id&gt;.events.jsonl</code> and writes the first of up to three snapshots (<code>run-&lt;id&gt;.json</code>).</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <article aria-labelledby="st2" style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#4a4f4b"><span aria-hidden="true" style="width:20px;height:20px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box"></span>Step 2 of 7 · Automated</p>
+        <h3 id="st2" style="margin:0;font-size:24px;line-height:1.3">The workflow drafts a candidate</h3>
+        <p style="margin:0;text-wrap:pretty">The draft step produces <strong>candidate-1</strong>, a change-request packet. In this release it comes from a fixed fixture, not a model.</p>
+        <dl style="margin:0;display:grid;gap:10px">
+          <div style="padding:12px 16px;background:#f7f5ef;border-radius:6px"><dt style="font-weight:600">Candidate</dt><dd style="margin:2px 0 0">A proposed result that must pass verification and receive human acceptance before the run can finish as Accepted.</dd></div>
+          <div style="padding:12px 16px;background:#f7f5ef;border-radius:6px"><dt style="font-weight:600">Hash (SHA-256)</dt><dd style="margin:2px 0 0">A fingerprint computed from the candidate’s exact content. Change one character and the fingerprint changes, so it identifies one specific version.</dd></div>
+        </dl>
+        <div style="border:1px solid #d6d2c6;border-radius:6px;padding:14px 16px;font-family:'IBM Plex Mono',monospace;font-size:15px;line-height:1.55;overflow-wrap:anywhere">
+          <div style="font-weight:600">candidate-1</div>
+          <div>ticket: "CR-1042"</div>
+          <div>rollbackPlan: <em>(missing)</em></div>
+          <div style="color:#4a4f4b">sha256: a41c…09e2 <span style="font-family:'IBM Plex Sans',sans-serif">(example value)</span></div>
+        </div>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li>Step action: <code>fixture.draft</code>. Execution boundary: <code>evidenceMode: "fixture"</code>, <code>liveInference: false</code>.</li>
+            <li>The step emits a <code>Candidate</code> record carrying <code>RunId</code>, <code>Sequence</code> and <code>CauseSequence</code>.</li>
+            <li>Packet shown simplified. See the fixture for the full field list.</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <article aria-labelledby="st3" style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#4a4f4b"><span aria-hidden="true" style="width:20px;height:20px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box"></span>Step 3 of 7 · Automated check</p>
+        <h3 id="st3" style="margin:0;font-size:24px;line-height:1.3">Verification catches a missing rollback plan</h3>
+        <p style="margin:0;text-wrap:pretty">An automated check reads candidate-1 and finds no rollback plan. The check records a failing verdict. Candidate-1 is not deleted; it stays in the log as evidence of what was caught.</p>
+        <dl style="margin:0"><div style="padding:12px 16px;background:#f7f5ef;border-radius:6px"><dt style="font-weight:600">Verification</dt><dd style="margin:2px 0 0">An automated, rule-based check of a candidate. It produces a pass or fail verdict. It does not approve anything; only a person does that.</dd></div></dl>
+        <p style="margin:0;padding:12px 16px;border:2px solid #9b2c1c;border-radius:6px;color:#7a2416;font-weight:600">✕ Fail — candidate-1: <code style="background:#f6e3df;color:#7a2416">rollbackPlan</code> is missing</p>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li>Step action: <code>verify</code>, which emits a <code>Verdict</code> record.</li>
+            <li>Candidate-1 and its SHA-256 digest are preserved in the ledger.</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <article aria-labelledby="st4" style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#4a4f4b"><span aria-hidden="true" style="width:20px;height:20px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box"></span>Step 4 of 7 · Automated</p>
+        <h3 id="st4" style="margin:0;font-size:24px;line-height:1.3">Repair produces a second candidate</h3>
+        <p style="margin:0;text-wrap:pretty">The repair step produces <strong>candidate-2</strong>, which adds the rollback plan. Both versions stay available, each with its own fingerprint.</p>
+        <p style="margin:0;font-size:16px;color:#3d423e;text-wrap:pretty">In v0.1.0, repair runs every time as part of the fixed sequence. It is not triggered by the failed check.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;font-family:'IBM Plex Mono',monospace;font-size:15px;line-height:1.55">
+          <div style="border:1px dashed #8d887b;border-radius:6px;padding:14px 16px;overflow-wrap:anywhere">
+            <div style="font-weight:600">candidate-1 <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:400">(kept)</span></div>
+            <div>rollbackPlan: <em>(missing)</em></div>
+            <div style="color:#4a4f4b">sha256: a41c…09e2</div>
+          </div>
+          <div style="border:2px solid #1a1d1b;border-radius:6px;padding:13px 15px;overflow-wrap:anywhere">
+            <div style="font-weight:600">candidate-2 <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:400">(new)</span></div>
+            <div>rollbackPlan: <strong>present</strong></div>
+            <div style="color:#4a4f4b">sha256: 7be3…5d10</div>
+          </div>
+        </div>
+        <p style="margin:0;font-size:14px;color:#4a4f4b">Hash values on this page are examples, not real digests.</p>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li>Step action: <code>fixture.repair</code>. Conditional branching is pending (M4).</li>
+            <li>Both candidates are preserved in the ledger with their SHA-256 digests.</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <article aria-labelledby="st5" style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#4a4f4b"><span aria-hidden="true" style="width:20px;height:20px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box"></span>Step 5 of 7 · Automated check</p>
+        <h3 id="st5" style="margin:0;font-size:24px;line-height:1.3">Verification checks the repaired candidate</h3>
+        <p style="margin:0;text-wrap:pretty">The same check runs on candidate-2 and passes. The run then pauses in <strong>AwaitingReview</strong>. A passing check does not finish the run; it only makes the candidate eligible for a human decision.</p>
+        <p style="margin:0;padding:12px 16px;border:2px solid #24613a;border-radius:6px;color:#1d4f2f;font-weight:600">✓ Pass — candidate-2 (sha256: 7be3…5d10)</p>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li>Second <code>verify</code> step. The workflow reaches a <code>RequestPort&lt;Verdict, ReviewDecision&gt;</code> and waits.</li>
+            <li>Snapshot 2 of 3 is written at the waiting-review phase.</li>
+            <li>If the host restarts here, the pending review is rebuilt from the event log (<code>RestoreReview</code>), not resumed from a framework checkpoint.</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <article aria-labelledby="st6" style="background:#fff;border:3px solid #1f4690;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#1f4690;font-weight:600"><span aria-hidden="true" style="width:20px;height:20px;border:3px solid #1f4690;border-radius:50%;box-sizing:border-box"></span>Step 6 of 7 · Human decision</p>
+        <h3 id="st6" style="margin:0;font-size:24px;line-height:1.3">A person accepts or rejects that exact candidate</h3>
+        <p style="margin:0;text-wrap:pretty">This is the workflow’s human decision step. You review candidate-2 and choose. Your decision is tied to candidate-2’s fingerprint, so it cannot be applied to a different version by mistake.</p>
+        <div style="padding:16px;background:#eef2f9;border-radius:8px;display:flex;flex-direction:column;gap:12px">
+          <p style="margin:0;font-size:16px">Reviewing <strong>candidate-2</strong> · sha256 7be3…5d10 · check: ✓ Pass</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <button disabled type="button" style="font:inherit;font-size:16px;font-weight:600;padding:10px 18px;min-height:44px;border-radius:6px;cursor:pointer;border:2px solid #1f4690;background:#1f4690;color:#fff">Accept repaired result</button>
+            <button disabled type="button" style="font:inherit;font-size:16px;font-weight:600;padding:10px 18px;min-height:44px;border-radius:6px;cursor:pointer;border:2px solid #1f4690;background:#fff;color:#1f4690">Reject run</button>
+            <button disabled type="button" style="font:inherit;font-size:16px;padding:10px 14px;min-height:44px;border-radius:6px;cursor:pointer;border:1px dashed #4a4f4b;background:transparent;color:#1a1d1b">What if the candidate had changed?</button>
+          </div>
+          <p role="status" style="margin:0;font-size:16px;font-weight:500">No decision yet. The run is awaiting review.</p>
+        </div>
+        <p style="margin:0;font-size:16px;color:#3d423e;text-wrap:pretty">The reviewer name is optional and self-reported. If left blank, the run records <code>local-process-user</code>. Neither is an authenticated identity.</p>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li><code>POST /api/runs/{id}/review</code> with <code>expectedHash</code>, which must equal the latest verified candidate’s SHA-256 hash.</li>
+            <li>A stale hash, a second decision, or a review against a failed run returns <code>HTTP 409</code>.</li>
+            <li>Attribution: <code>actorSource: "self-reported"</code>, or <code>local-process-user</code> when omitted.</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <article aria-labelledby="st7" style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:15px;color:#4a4f4b"><span aria-hidden="true" style="width:20px;height:20px;border:2px solid #1a1d1b;border-radius:2px;box-sizing:border-box"></span>Step 7 of 7 · Automated</p>
+        <h3 id="st7" style="margin:0;font-size:24px;line-height:1.3">The run keeps a receipt</h3>
+        <p style="margin:0;text-wrap:pretty">Run status: <strong><span id="outcome">Awaiting review</span></strong>. In Steppewise, the events recorded so far are already on disk, because each step was written down before the next one started.</p>
+        <dl style="margin:0"><div style="padding:12px 16px;background:#f7f5ef;border-radius:6px"><dt style="font-weight:600">Receipt</dt><dd style="margin:2px 0 0">The durable record of a run: what each step produced, what each check found, and what the person decided about which fingerprint. Entries are only ever added, never edited.</dd></div></dl>
+        <ul style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px">
+          <li><code>run-&lt;id&gt;.events.jsonl</code> — the step-by-step log</li>
+          <li><code>run-&lt;id&gt;.json</code> — a summary snapshot of the run’s current state</li>
+          <li><code>spans.jsonl</code> — matching OpenTelemetry trace records</li>
+        </ul>
+        <details style="border-top:1px solid #e3dfd4;padding-top:12px">
+          <summary>Technical detail</summary>
+          <ul style="margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px">
+            <li>Each transition appends and flushes one <code>DurableEvent</code> JSONL record before advancing.</li>
+            <li>Snapshots are reductions of the log, written at admission, waiting review and terminal state.</li>
+            <li><code>traceId</code> and <code>spanId</code> match between the event log and <code>spans.jsonl</code>. Spans are local files; OTLP network export is pending (M4).</li>
+          </ul>
+        </details>
+      </article>
+      
+
+      
+      <div style="display:flex;justify-content:space-between;gap:12px">
+        <button disabled type="button" style="font:inherit;font-size:16px;padding:10px 18px;min-height:44px;border:1px solid #1a1d1b;background:#fff;color:#1a1d1b;border-radius:6px;cursor:pointer;">← Previous</button>
+        <button disabled type="button" style="font:inherit;font-size:16px;font-weight:600;padding:10px 18px;min-height:44px;border:1px solid #1a1d1b;background:#1a1d1b;color:#fff;border-radius:6px;cursor:pointer;">Next step →</button>
+      </div>
+      
+
+      <aside aria-labelledby="rc-h" style="border:1px solid #1a1d1b;border-radius:8px;padding:20px;background:#fbfaf6;display:flex;flex-direction:column;gap:10px">
+        <h3 id="rc-h" style="margin:0;font-size:18px">Illustrative receipt</h3>
+        <p style="margin:0;font-size:14px;color:#4a4f4b">Simulated examples, not runtime evidence. Events are retained as you explore.</p>
+        <ol style="margin:0;padding-left:24px;display:flex;flex-direction:column;gap:4px;font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.5">
+          
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="limits-h" style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+  <h2 id="limits-h" style="margin:0;font-size:24px;line-height:1.3">Current limits (v0.1.0)</h2>
+  <p style="margin:0;text-wrap:pretty">This is a reference implementation for learning and review, not a production system.</p>
+  <details style="background:#fff;border:1px solid #d6d2c6;border-radius:8px;padding:16px 20px">
+    <summary>Show what this release does not do</summary>
+    <ul style="margin:12px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:16px">
+      <li>Synthetic fixtures only. No live AI or LLM calls, no external network requests.</li>
+      <li>Repair always runs; there are no general conditions or parallel steps yet.</li>
+      <li>Loopback only (<code>127.0.0.1</code>), <code>dev</code> and <code>qa</code> profiles. <code>prod</code> is refused at startup.</li>
+      <li>Reviewer identity is self-reported or the OS process user. There is no authentication.</li>
+      <li>One host per evidence directory, enforced by <code>.owner.lock</code>. No distributed or multi-host execution.</li>
+      <li>A truncated event log stops the whole host at startup. <strong>Planned, not built:</strong> quarantining only the affected run.</li>
+      <li>Process-kill fault trials do not establish power-loss or multi-host durability.</li>
+    </ul>
+    <p style="margin:12px 0 0;font-size:16px">Full list: <a href="https://github.com/djcdevelopment/steppewise/blob/main/docs/STATUS.md">docs/STATUS.md</a></p>
+  </details>
+</section>
+
+<section aria-labelledby="try-h" style="display:flex;flex-direction:column;gap:14px;max-width:760px">
+  <h2 id="try-h" style="margin:0;font-size:24px;line-height:1.3">Try it yourself</h2>
+  <ol style="margin:0;padding-left:24px;display:flex;flex-direction:column;gap:12px">
+    <li>Install the .NET 10 SDK (10.0.401 or newer 10.0.4xx).</li>
+    <li>From the repository root, build and run:
+      <pre style="margin:8px 0 0;padding:14px 16px;background:#1a1d1b;color:#f2efe6;border-radius:6px;overflow-x:auto;font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.6" tabindex="0" aria-label="Linux and macOS commands">dotnet restore src/Steppewise/Steppewise.csproj --locked-mode
+dotnet build src/Steppewise/Steppewise.csproj -c Release --no-restore -warnaserror
+./scripts/run.sh</pre>
+      <span style="display:block;margin-top:6px;font-size:16px">On Windows, use the PowerShell commands in the <a href="https://github.com/djcdevelopment/steppewise#windows-powershell">README Quick Start</a>.</span>
+    </li>
+    <li>Open <a href="http://127.0.0.1:5188">http://127.0.0.1:5188</a>, pick <strong>Service intake · change request review</strong>, and start a run.</li>
+    <li>When it pauses, click <strong>Accept repaired result</strong> or <strong>Reject run</strong>. Switch to the <strong>Engineer</strong> view to see the hashes.</li>
+  </ol>
+</section>
+
+<p><a href="https://github.com/djcdevelopment/steppewise">Source and README</a> · <a href="https://github.com/djcdevelopment/steppewise/blob/main/docs/REVIEW-HISTORY.md">Review history</a> · <a href="https://github.com/djcdevelopment/steppewise/tree/main/docs/architecture">Architecture</a></p><footer style="border-top:1px solid #d6d2c6;padding-top:20px;font-size:16px;color:#3d423e;display:flex;flex-direction:column;gap:6px">
+  <p style="margin:0">Static version for the README: <a href="walkthrough.svg">walkthrough.svg</a> · text equivalent: <a href="https://github.com/djcdevelopment/steppewise/blob/main/docs/WALKTHROUGH.md">WALKTHROUGH.md</a></p>
+  <p style="margin:0">Steppewise — stepwise execution, from Steppe Integrations. MIT License.</p>
+</footer>
+</div>
+</main></body></html>
