@@ -12,7 +12,7 @@ This walks through one run of the bundled `service-intake` example. In v0.1.0 ev
 
 ## Words used below
 
-- **Candidate**: a proposed result. Not trusted until checked and decided on.
+- **Candidate**: a proposed result that must pass verification and receive human acceptance before the run can finish as Accepted.
 - **Verification**: an automated, rule-based check that returns pass or fail. It never approves anything.
 - **Hash (SHA-256)**: a fingerprint of a candidate's exact content. Any change produces a different hash.
 - **Receipt**: the durable record of a run. Entries are added, never edited.

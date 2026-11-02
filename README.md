@@ -25,7 +25,7 @@ Most agentic demos treat governance and observability as post-hoc logging. Stepp
 2. **Draft → Verify → Repair → Verify → Human `RequestPort`**: Each workflow executes a validated five-step chain (`fixture.draft` → `verify` → `fixture.repair` → `verify` → `human.review`) through `InProcessExecution.RunStreamingAsync` and `RequestPort.Create<Verdict, ReviewDecision>`. Both the initial failed candidate (`candidate-1`) and the repaired passing candidate (`candidate-2`) are preserved in the ledger with their SHA-256 digests.
 3. **Append-Only Event Ledger (`run-<id>.events.jsonl`)**: Every transition appends and flushes a `DurableEvent` JSONL record before advancing. Materialized snapshots (`run-<id>.json`) are stateless reductions. Snapshots are written 3 times per run: admission, awaiting review, terminal.
 4. **Bidirectional OpenTelemetry Span Correlation (`spans.jsonl`)**: `ActivitySource("Steppewise")` and `ActivityListener` flush an activity for every domain event, matching `traceId` and `spanId` between `run-<id>.events.jsonl` and `spans.jsonl`.
-5. **Fail-Closed Startup & Fault Recovery**: Interrupted in-flight runs recover as `Failed (Interrupted)`, interrupted review decisions surface as `Failed (NeedsReconciliation)` rather than silently auto-completing, and tampered files refuse startup.
+5. **Fail-Closed Startup & Fault Recovery**: Interrupted in-flight runs recover as `Failed (Interrupted)`, interrupted review decisions surface as `Failed (NeedsReconciliation)` rather than silently auto-completing, and startup refuses malformed evidence, invalid artifact hashes, and snapshot/log inconsistencies.
 
 ![Beginner Execution Panel](docs/architecture/panels/a-execute.svg)
 
@@ -68,8 +68,8 @@ dotnet run --project src/Steppewise/Steppewise.csproj -c Release --no-build
 If you have forty minutes and want to see it before reading it: [walkthrough panel](docs/architecture/panels/a-execute.svg) (the execution panel is the only panel currently in that directory).
 
 1. **Select a workflow**:
-   - **Service intake · change request review** (`service-intake`, `examples/service-intake.json`) — generates a synthetic change-request packet (`ticket: "CR-1042"`), catches a missing `rollbackPlan` on `candidate-1`, repairs the packet in `candidate-2`, and pauses at `AwaitingReview`.
-   - **Local AI work · bounded maintenance note** (`local-ai-work`, `examples/local-ai-work.json`) — drafts a maintenance summary, catches an unverified `statusClaim` on `candidate-1`, repairs it to `pending-verification` in `candidate-2`, and pauses at `AwaitingReview`.
+   - **Service intake · change request review** (`service-intake`, `examples/service-intake.json`) — generates a synthetic change-request packet (`ticketId: "CR-1042"`), catches a missing `rollbackPlan` on `candidate-1`, repairs the packet in `candidate-2`, and pauses at `AwaitingReview`.
+   - **Local AI work · bounded maintenance note** (`local-ai-work`, `examples/local-ai-work.json`) — drafts a maintenance summary, catches an incorrect 300-day maintenance interval on `candidate-1`, repairs it to the expected 30 days in `candidate-2`, and pauses at `AwaitingReview`.
 2. **Switch views (`Operator`, `Business owner`, `Engineer`)**:
    - **Operator view** shows synchronous domain progression and preserved candidates.
    - **Business owner view** filters out `ActionStarted` step-entry noise to highlight outcomes and review decisions.
@@ -112,7 +112,7 @@ Steppewise ships a zero-dependency Python qualification harness (`scripts/qualif
 python3 scripts/qualify.py --url http://127.0.0.1:5188
 ```
 
-Verifies admission, failed original candidate preservation (`candidate-1`), repaired candidate verification (`candidate-2`), SHA-256 digest integrity, causal `CauseSequence` domain chaining, executor entry ordering, stale-hash `HTTP 409` rejection, explicit accept/reject receipts, duplicate-review `HTTP 409` rejection, and unknown-workflow refusal across both `service-intake` and `local-ai-work` (`docs/qualification-linux.json`).
+Verifies admission, failed original candidate preservation (`candidate-1`), repaired candidate verification (`candidate-2`), SHA-256 digest integrity, causal `CauseSequence` domain chaining, stale-hash `HTTP 409` rejection, explicit accept/reject receipts, and duplicate-review `HTTP 409` rejection across both `service-intake` and `local-ai-work` (`docs/qualification-linux.json`).
 
 ### Crash testing: 358 forced process kills, 3,435 / 3,435 checks
 
@@ -136,6 +136,7 @@ What review found and what changed: [docs/REVIEW-HISTORY.md](docs/REVIEW-HISTORY
 Steppewise documents its exact verified scope in [docs/STATUS.md](docs/STATUS.md) and [CONTRACTS-v2.md](CONTRACTS-v2.md):
 
 - A truncated event log stops the whole host, not just that run. Per-run quarantine is planned for M4. See [`Runtime.cs` — `LoadEvidence`, lines 244–261](src/Steppewise/Runtime.cs#L244-L261).
+- **Evidence integrity, not authenticated history**: Hash and consistency checks do not authenticate history against someone who can rewrite the evidence files.
 - **Synthetic fixtures only (`v0.1.0`)**: No live LLM calls, external APIs, or prompt-injection benchmarks are executed.
 - **Single-host `.owner.lock` storage**: Concurrent multi-host writers, network filesystems (NFS/SMB), and distributed PostgreSQL leases are not implemented in `v0.1.0`.
 - **Graph reconstruction vs. `CheckpointManager`**: `RestoreReview` rebuilds a fresh three-node MAF review graph from the validated event log rather than calling `InProcessExecution.ResumeStreamingAsync` with a `CheckpointManager`.

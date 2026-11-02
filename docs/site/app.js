@@ -7,7 +7,7 @@ const buttons=titles.map((title,i)=>{const li=document.createElement('li'), b=do
 const bs=[...document.querySelectorAll('button')].filter(b=>!b.classList.contains('step'));
 const toggle=bs[0], accept=bs[1], reject=bs[2], stale=bs[3], prev=bs[4], next=bs[5];
 const msg=document.querySelector('[role=status]'), receipt=document.querySelector('aside ol'), outcome=document.querySelector('#outcome');
-const reset=document.createElement('button');reset.textContent='Restart simulation';reset.onclick=()=>{step=reach=1;decision=null;all=false;render()};document.querySelector('aside').append(reset);
+const reset=document.createElement('button');reset.textContent='Restart simulation';reset.onclick=()=>{step=reach=1;decision=null;all=false;go(1)};document.querySelector('aside').append(reset);
 const events=['Run admitted · service-intake · CR-1042 · snapshot 1','candidate-1 produced · example hash a41c…09e2','candidate-1 checked · Fail · rollbackPlan missing','candidate-2 produced · example hash 7be3…5d10 · candidate-1 retained','candidate-2 checked · Pass · awaiting review · snapshot 2'];
 function render(){
  articles.forEach((a,i)=>a.hidden=!all&&i!==step-1);
