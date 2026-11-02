@@ -7,6 +7,10 @@
 [![.NET 10.0](https://img.shields.io/badge/.NET-10.0-512BD4)](global.json)
 [![Microsoft Agent Framework](https://img.shields.io/badge/Microsoft.Agents.AI.Workflows-1.27.0-0078D4)](src/Steppewise/Steppewise.csproj)
 
+> **Start here: [Open the two-minute interactive walkthrough](https://djcdevelopment.github.io/steppewise/)**
+>
+> See a draft get checked, repaired, and held for your decision—all in your browser, with no installation. This is an illustrative simulation. [Read the text version](docs/WALKTHROUGH.md).
+
 Steppewise is not a bespoke workflow engine; it wraps Microsoft Agent Framework (`Microsoft.Agents.AI.Workflows` `1.27.0`) execution in deterministic contract rails, an append-only event-sourced ledger, and SHA-256-bound human review. Microsoft Agent Framework does for governance, observability, traceability, and agent-to-agent handoff what controller attributes did for API contracts when Swagger started generating from the build — the contract stops being a document someone maintains and becomes a byproduct of execution. Steppewise demonstrates that: the ledger, the spans, and the human-review receipt fall out of running the graph; nothing is written up afterward.
 
 > **Execution boundary (`v0.1.0`)**: Steppewise executes deterministic synthetic fixtures (`evidenceMode: "fixture"`, `liveInference: false`) on a loopback-only host (`127.0.0.1`). It makes zero live LLM calls, performs no external network requests, and requires an explicit human review decision bound to the verified candidate's SHA-256 hash before any run can complete as `Accepted` or `Rejected`.
@@ -26,8 +30,6 @@ Most agentic demos treat governance and observability as post-hoc logging. Stepp
 ![Beginner Execution Panel](docs/architecture/panels/a-execute.svg)
 
 ---
-
-**New here? [Explore the two-minute interactive walkthrough](https://djcdevelopment.github.io/steppewise/)** · [Text version](docs/WALKTHROUGH.md)
 
 ## Quick Start (Linux, macOS, and Windows)
 
