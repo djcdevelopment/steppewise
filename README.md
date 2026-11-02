@@ -1,6 +1,6 @@
 # Steppewise
 
-**Steppewise — deterministic rails for agentic workflows. .NET 10 · Microsoft Agent Framework · OpenTelemetry. Every step verified, every decision human, every run a receipt.**
+**Steppewise: deterministic rails for agentic workflows. .NET 10 · Microsoft Agent Framework · OpenTelemetry. Every step verified, every decision human, every run a receipt.**
 
 [![CI](https://github.com/djcdevelopment/steppewise/actions/workflows/ci.yml/badge.svg)](https://github.com/djcdevelopment/steppewise/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
