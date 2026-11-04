@@ -1,0 +1,40 @@
+name: Fault qualification
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ "v*" ]
+
+permissions:
+  contents: read
+
+jobs:
+  fault-qualification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          global-json-file: global.json
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Publish portable candidate
+        run: dotnet publish src/Steppewise/Steppewise.csproj -c Release -warnaserror -p:RestoreLockedMode=true -p:SourceRevisionId="${GITHUB_SHA}" -o artifacts/portable
+
+      - name: Run managed process-kill qualification (tier A)
+        run: python3 scripts/qualify.py --managed --milestone A --dotnet dotnet --dll artifacts/portable/Steppewise.dll --output qualification.json
+
+      - name: Upload fault qualification receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: qualification-tier-a
+          path: qualification.json
+          if-no-files-found: warn

@@ -287,7 +287,7 @@ public sealed class WorkflowRuntime : IAsyncDisposable
             sessions.Add(snapshot.Id, new Session(snapshot) { Archived = true });
         }
     }
-    static RunSnapshot Reduce(RunSnapshot previous, DurableEvent envelope)
+    internal static RunSnapshot Reduce(RunSnapshot previous, DurableEvent envelope)
     {
         if (envelope.SchemaVersion != 2 || envelope.RunId != previous.Id || envelope.Workflow != previous.Workflow || envelope.Event.Sequence != previous.Version + 1) throw new InvalidDataException("Invalid event version, identity or sequence.");
         var next = Clone(previous) with { Version = envelope.Event.Sequence, Status = envelope.NextStatus ?? previous.Status };
@@ -322,7 +322,7 @@ public sealed class WorkflowRuntime : IAsyncDisposable
         using var file = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read, 4096, FileOptions.WriteThrough);
         file.Write(Encoding.UTF8.GetBytes(value)); file.Flush(true);
     }
-    static void ValidateDefinition(WorkflowDefinition d, string expected)
+    internal static void ValidateDefinition(WorkflowDefinition d, string expected)
     {
         if (d.SchemaVersion != 1 || d.Version != 1 || d.Id != expected || d.Steps is null || d.Steps.Count != 5 || !d.Steps.Select(s => s.Action).SequenceEqual(Actions) || d.Steps.Select(s => s.Id).Distinct().Count() != 5 || d.Steps.Any(s => string.IsNullOrWhiteSpace(s.Id) || string.IsNullOrWhiteSpace(s.Boundary))) throw new InvalidDataException("Unsupported definition: v1 supports exactly five steps in order: fixture.draft, verify, fixture.repair, verify, human.review.");
     }
