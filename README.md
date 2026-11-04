@@ -125,9 +125,15 @@ python3 scripts/qualify.py --managed --milestone A --dotnet dotnet --dll artifac
 - **Zero dangling reviews (`362 / 362`)**: Every interrupted mid-execution run transitions deterministically to `Failed (Interrupted)` and every run interrupted after `DecisionRequested` transitions to `Failed (NeedsReconciliation)`.
 - **Double-restart idempotency (`4 / 4`)**: Restarting recovered evidence a second time appends zero duplicate events.
 
+This tier takes about 10 minutes, so it runs on release tags and on demand rather than on every push ([`fault-qualification.yml`](.github/workflows/fault-qualification.yml)), and uploads `qualification.json` as a run artifact. The `8,182 / 8,182` figure in the changelog is the larger tier C run (`--milestone C`), which also needs browser evidence and a golden evidence root.
+
+The check count varies between runs. In three container reruns on 2026-11-04, two passed completely (`3,428 / 3,428` and `3,429 / 3,429`). The third failed `2` of `3,317` checks after one request returned an empty response in the `local-ai-work` reject scenario. That failure has not been diagnosed yet.
+
 See [docs/QUALIFICATION.md](docs/QUALIFICATION.md) and [CHANGELOG.md](CHANGELOG.md) for the full verification protocol and release metrics.
 
 What review found and what changed: [docs/REVIEW-HISTORY.md](docs/REVIEW-HISTORY.md)
+
+This repository's public history starts at the `v0.1.0` release; earlier development is not included here.
 
 ---
 
